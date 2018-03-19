@@ -22,7 +22,7 @@ public class CreateTable {
 
 	      // Instantiating table descriptor class
 	      HTableDescriptor tableDescriptor = new
-	      HTableDescriptor(TableName.valueOf("TelemetryGO87"));
+	      HTableDescriptor(TableName.valueOf("TelemetryTEST"));
 
 	      // Adding column families to table descriptor
 	      tableDescriptor.addFamily(new HColumnDescriptor("values"));
