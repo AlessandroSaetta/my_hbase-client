@@ -51,42 +51,36 @@ public class InsertTelemetry
 			      Calendar calendar = Calendar.getInstance();
 			      calendar.setTimeInMillis(frame.getTimestamp());
 			      ByteBuffer data = frame.getData();
-			      //CharSequence gs = frame.getGs();
+  		          CharSequence gs = frame.getGs();
 			      //frame.getGs()
-			      //Put p = new Put(Bytes.toBytes("row1"));
-			      //p.add(Bytes.toBytes("values"),
-			    	      //Bytes.toBytes("TS"),Bytes.toBytes(frame.getTimestamp()));
-			      //p.add(Bytes.toBytes("values"),
-			    	      //Bytes.toBytes("Data"),Bytes.toBytes(frame.getData()));
-			      //p.add(Bytes.toBytes("information"),Bytes.toBytes("GS"),
-			    	     //Bytes.toBytes(frame.getGs());
-			      //hTable.put(p);
-			      //System.out.println("data inserted!!");
-			      
+			      			      
 			      //System.out.print(calendar.getTime() + ", ");
 			     // while (data.hasRemaining()) {
 			    	  //System.out.print(String.format("%02X ", data.get()));
-				      //System.out.println();//va a capo
+				      //System.out.println();
 			    	  
 			    	  count++;
-			    	  if (count<7) {
+//			    	  if (count<15) {
+			    		  
+			    		  
+			    			
 			       
 			            Put p = new Put(Bytes.toBytes(l)); 
-//			              p.add(Bytes.toBytes("information"),Bytes.toBytes("GS"),
-//			            		  Bytes.toBytes();
+			              p.add(Bytes.toBytes("information"),Bytes.toBytes("GS"),
+			            		  Bytes.toBytes(gs.toString()));
 			    	      p.add(Bytes.toBytes("information"),Bytes.toBytes("Sat"),
-			    	    		  Bytes.toBytes("DelfiC3"));
+			    	    		  Bytes.toBytes("Delfi-C3"));
 			    	      p.add(Bytes.toBytes("status"),Bytes.toBytes("Proc"), 
 			    	    		  Bytes.toBytes("0"));
-//		    	          p.add(Bytes.toBytes("values"),
-//		    	    	          Bytes.toBytes("TS"),Bytes.getBytes());
-			    	      p.add(Bytes.toBytes("values"),
-			    	    	      Bytes.toBytes("Data"),Bytes.toBytes(data));
+		    	          p.add(Bytes.toBytes("values"),Bytes.toBytes("TS"),
+		    	        		  Bytes.toBytes(frame.getTimestamp()));
+			    	      p.add(Bytes.toBytes("values"),Bytes.toBytes("Data"),
+			    	    		  Bytes.toBytes(data));
 			    	      hTable.put(p);
 			    	      l++;
 			    	      
-			    	  }
-			    	  else break;
+//			    	  }
+//			    	  else break;
 
 			      
 			    }
@@ -110,39 +104,8 @@ public class InsertTelemetry
 		         hTable.close();
 		         System.out.println("data inserted!!!");
 	   
-	//public static void insert(HTable hTable) throws IOException 
-	{
-	
 
-
-	      
-	   // Instantiating Put class
-	      // accepts a row name.
-	      //Put p = new Put(Bytes.toBytes("row1")); 
-
-	      // adding values using add() method
-	      // accepts column family name, qualifier/row name ,value
-	      //.add(Bytes.toBytes("values"),
-	     // Bytes.toBytes("TS"),Bytes.toBytes("562398523"));
-
-	      //p.add(Bytes.toBytes("values"),
-	     // Bytes.toBytes("Data"),Bytes.toBytes("23.9"));
-
-	     // p.add(Bytes.toBytes("information"),Bytes.toBytes("GS"),
-	     // Bytes.toBytes("IT"));
-
-	      //p.add(Bytes.toBytes("information"),Bytes.toBytes("Sat"),
-	      //Bytes.toBytes("DelfiC3"));
-	      
-	      //p.add(Bytes.toBytes("status"),Bytes.toBytes("Proc"),
-	      //Bytes.toBytes("0"));
-	      
-	      // Saving the put Instance to the HTable.
-	      //hTable.put(p);
-	      //System.out.println("data inserted!");
-
-
-	   }
+	   
       }
 	
 }
