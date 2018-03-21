@@ -5,19 +5,16 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.NoSuchElementException;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.util.Bytes;
 
 import SDTL.FileOperations.FileReader;
 import SDTL.Protocol.DownlinkFrame;
@@ -33,15 +30,13 @@ public class InsertTelemetry
 	      // Instantiating Configuration class
 	      Configuration config = HBaseConfiguration.create();
 
+	      try (Connection conn = ConnectionFactory.createConnection(config);
+	    	      Table hTable = conn.getTable(TableName.valueOf("Telemetry"))) {
 	      // Instantiating HTable class
-	      HTable hTable = new HTable(config, "TelemetryTEST");
-	      
-	      
-	      try 
-			{
+	   	   
 	    	    int l = 0;
-	    	    int count = 0;
-				int index = 0;
+//	    	    int count = 0;
+//				int index = 0;
 				FileReader<DownlinkFrame> reader = new FileReader<DownlinkFrame>(DownlinkFrame.SCHEMA$, "frames.avro");
 				DownlinkFrame frame = new DownlinkFrame();
 				while (reader.hasNext()) 
@@ -52,29 +47,26 @@ public class InsertTelemetry
 			      calendar.setTimeInMillis(frame.getTimestamp());
 			      ByteBuffer data = frame.getData();
   		          CharSequence gs = frame.getGs();
-			      //frame.getGs()
-			      			      
+			      			      			      
 			      //System.out.print(calendar.getTime() + ", ");
 			     // while (data.hasRemaining()) {
 			    	  //System.out.print(String.format("%02X ", data.get()));
 				      //System.out.println();
 			    	  
-			    	  count++;
+//			    	  count++;
 //			    	  if (count<15) {
-			    		  
-			    		  
-			    			
+			    		  			    			
 			       
 			            Put p = new Put(Bytes.toBytes(l)); 
-			              p.add(Bytes.toBytes("information"),Bytes.toBytes("GS"),
+			              p.addColumn(Bytes.toBytes("information"),Bytes.toBytes("GS"),
 			            		  Bytes.toBytes(gs.toString()));
-			    	      p.add(Bytes.toBytes("information"),Bytes.toBytes("Sat"),
+			    	      p.addColumn(Bytes.toBytes("information"),Bytes.toBytes("Sat"),
 			    	    		  Bytes.toBytes("Delfi-C3"));
-			    	      p.add(Bytes.toBytes("status"),Bytes.toBytes("Proc"), 
+			    	      p.addColumn(Bytes.toBytes("status"),Bytes.toBytes("Proc"), 
 			    	    		  Bytes.toBytes("0"));
-		    	          p.add(Bytes.toBytes("values"),Bytes.toBytes("TS"),
+		    	          p.addColumn(Bytes.toBytes("values"),Bytes.toBytes("TS"),
 		    	        		  Bytes.toBytes(frame.getTimestamp()));
-			    	      p.add(Bytes.toBytes("values"),Bytes.toBytes("Data"),
+			    	      p.addColumn(Bytes.toBytes("values"),Bytes.toBytes("Data"),
 			    	    		  Bytes.toBytes(data));
 			    	      hTable.put(p);
 			    	      l++;
@@ -101,9 +93,8 @@ public class InsertTelemetry
 		     
 		      
 		      // closing HTable
-		         hTable.close();
+//		         hTable.close();
 		         System.out.println("data inserted!!!");
-	   
 
 	   
       }

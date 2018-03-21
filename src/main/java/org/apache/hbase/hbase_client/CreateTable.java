@@ -3,26 +3,28 @@ import java.io.IOException;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.TableName;
 
 import org.apache.hadoop.conf.Configuration;
 
 public class CreateTable {
-	private static HBaseAdmin admin;
 
 	public static void main(String[] args) throws IOException {
 		  BasicConfigurator.configure();
-
-	      // Instantiating configuration class
+		  
 	      Configuration con = HBaseConfiguration.create();
-        
-	      admin = new HBaseAdmin(con);
+	      
+	      try (Connection connection = ConnectionFactory.createConnection(con); 
+	             Admin admin = connection.getAdmin()) {
+       
 
 	      // Instantiating table descriptor class
 	      HTableDescriptor tableDescriptor = new
-	      HTableDescriptor(TableName.valueOf("TelemetryTEST"));
+	      HTableDescriptor(TableName.valueOf("Telemetry"));
 
 	      // Adding column families to table descriptor
 	      tableDescriptor.addFamily(new HColumnDescriptor("values"));
@@ -31,7 +33,8 @@ public class CreateTable {
 
 	      // Execute the table through admin
 	      admin.createTable(tableDescriptor);
-	      System.out.println(" Table created ");
 	   }
+	      System.out.println(" Table created ");
 
+	}
 }
